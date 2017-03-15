@@ -11,16 +11,18 @@
         var eCanvas = document.getElementById("canvas");
         var ctx = eCanvas.getContext("2d");
 
-        ctx.fillText("Olá Mundo!",10,10);
         var azul = {
           x : 0,
           y : 50
         };
 
         /*** Calculando FPS **/
-        var fps = 60;
-        var dt = 1 / fps;
-        setInterval(desenha,1000/30);
+        var fps = 120;
+        var atual = new Date();
+        var anterior = new Date();
+        var dt  = 1 / fps;
+
+        desenha();
 
         function desenhaAzul(ctx) {
             ctx.linewidth = 2;
@@ -37,14 +39,17 @@
         }
 
         function desenha() {
+            requestAnimationFrame(desenha);
+            atual = new Date();
+            dt = (atual - anterior) / 1000;
             ctx.clearRect(0,0,eCanvas.width, eCanvas.height);
-            azul.x += 10 * dt;
-            if(azul.x > 800){
-              azul.x = 0
-              azul.y = azul.y + 10;
-            }
+            ctx.fillStyle = "darkgreen";
+            ctx.fillText("dt : "+dt+" fps : "+ Math.floor(1/dt),10,10);
+            azul.x += 30 * dt;
+            azul.y += 10 * dt;
             desenhaAzul(ctx);
             desenhaVermelho(ctx);
+            anterior = atual;
         }
 
         console.log(eCanvas);
