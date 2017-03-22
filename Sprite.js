@@ -3,6 +3,8 @@ function Sprite(){
     this.y = 0;
     this.vx = 0;
     this.vy = 0;
+    this.ax = 0;
+    this.ay = 0;
     this.color = "blue";
 }
 
@@ -14,6 +16,10 @@ Sprite.prototype.desenhar = function (ctx) {
 };
 
 Sprite.prototype.mover = function(dt){
+   /** Ajustando a aceleracao ***/
+   this.vx = this.vx + this.ax*dt;
+   this.vy = this.vy + this.ay*dt;
+   /*** Ajustando a nova posicao conforme a aceleracao **/
    this.x = this.x + this.vx * dt;
    this.y = this.y + this.vy * dt;
 }
