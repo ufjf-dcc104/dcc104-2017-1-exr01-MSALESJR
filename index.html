@@ -11,6 +11,10 @@
         var eCanvas = document.getElementById("canvas");
         var ctx = eCanvas.getContext("2d");
 
+        var fuel = 100;
+        var acelerandoX = false;
+        var acelerandoY = false;
+
         var azul = new Sprite();
         var vermelho = new Sprite();
         vermelho.x = 50;
@@ -32,6 +36,8 @@
             ctx.clearRect(0,0,eCanvas.width, eCanvas.height);
             ctx.fillStyle = "darkgreen";
             ctx.fillText("dt : "+dt+" fps : "+ Math.floor(1/dt),10,10);
+            ctx.fillRect(20,20,fuel, 5);
+            ctx.strokeRect(20,20,100, 5);
 
             azul.mover(dt);
             azul.desenhar(ctx);
@@ -39,6 +45,19 @@
             vermelho.mover(dt);
             vermelho.desenhar(ctx);
 
+            if(acelerandoX){
+              fuel = fuel - 3 * dt;
+            }
+            if(acelerandoY){
+              fuel = fuel - 5 * dt;
+            }
+
+            if(azul.y > 400){
+               azul.y  = 0;
+               azul.x  = 150;
+               azul.vy = 0;
+               azul.ay = 0;
+            }
             anterior = atual;
         }
 
@@ -46,18 +65,23 @@
           switch (e.keyCode) {
             case 37:
               azul.ax = -100;
+              acelerandoX = true;
               break;
             case 38:
               azul.ay = -100;
+              acelerandoY = true;
               break;
             case 39:
               azul.ax = +100;
+              acelerandoX = true;
               break;
             case 40:
               azul.ay = +100;
+              acelerandoY = true;
               break;
             case 32:
               azul.vy = azul.vy - 150;
+              break;
           }
         });
 
@@ -65,15 +89,19 @@
           switch (e.keyCode) {
             case 37:
               azul.ax = 0;
+              acelerandoX = false;
               break;
             case 38:
               azul.ay = 0;
+              acelerandoY = false;
               break;
             case 39:
               azul.ax = 0;
+              acelerandoX = false;
               break;
             case 40:
               azul.ay = 0;
+              acelerandoY = false;
               break;
           }
         });
