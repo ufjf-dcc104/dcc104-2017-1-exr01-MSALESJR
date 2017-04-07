@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>DCC104-2017 - (Exemplo 01)</title>
+    <style>
+      *{
+        margin:0;
+        padding: 0;
+      }
+    </style>
+    <script src="Sprite.js" charset="utf-8"></script>
+    <script src="Level.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <canvas id="canvas" width="600" height="600" style="background:#000;  display: block;
+    margin: 50px auto;"></canvas>
+    <script type="text/javascript">
+
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+        // Great success! All the File APIs are supported.
+        } else {
+
+        }
+        var eCanvas = document.getElementById("canvas");
+        var ctx = eCanvas.getContext("2d");
+
+        var fuel = 100;
+        var acelerandoX = false;
+        var acelerandoY = false;
+
+        var azul = new Sprite();
+        var level = new Level();
+        level.inimigos = 20;
+        level.init();
+
+        /*** Calculando FPS **/
+        var fps = 120;
+        var atual = new Date();
+        var anterior = new Date();
+        var dt  = 1 / fps;
+
+        desenha();
+
+        function desenha() {
+            requestAnimationFrame(desenha);
+            atual = new Date();
+            dt = (atual - anterior) / 1000;
+            ctx.clearRect(0,0,eCanvas.width, eCanvas.height);
+            ctx.fillStyle = "#fff";
+            ctx.font="14px Georgia";
+            ctx.fillText("dt : "+dt+" fps : "+ Math.floor(1/dt),20,20);
+            ctx.fillRect(20,30,fuel, 5);
+            ctx.strokeRect(20,20,100, 5);
+
+            level.perseguir(azul, dt);
+            azul.mover(dt);
+            level.mover(dt);
+
+            level.colidiuCom(azul,function(inimigo, alvo, index){
+               //level.sprites.splice(index,1);
+              if(index % 2 == 1 ){
+                 inimigo.color = "red";
+              }
+            });
+
+            azul.desenhar(ctx);
+            level.desenhar(ctx);
+
+            if(acelerandoX){
+              fuel = fuel - 3 * dt;
+            }
+            if(acelerandoY){
+              fuel = fuel - 5 * dt;
+            }
+
+            if(azul.y > 600){
+               azul.y  = 0;
+               azul.x  = 150;
+               azul.vy = 0;
+               azul.ay = 0;
+            }
+            anterior = atual;
+        }
+
+        addEventListener("keydown", function(e){
+          switch (e.keyCode) {
+            case 37:
+              azul.ax = -100;
+              acelerandoX = true;
+              break;
+            case 38:
+              azul.ay = -100;
+              acelerandoY = true;
+              break;
+            case 39:
+              azul.ax = +100;
+              acelerandoX = true;
+              break;
+            case 40:
+              azul.ay = +100;
+              acelerandoY = true;
+              break;
+            case 32:
+              azul.vy = azul.vy - 150;
+              break;
+          }
+        });
+
+        addEventListener("keyup", function(e){
+          switch (e.keyCode) {
+            case 37:
+              azul.ax = 0;
+              acelerandoX = false;
+              break;
+            case 38:
+              azul.ay = 0;
+              acelerandoY = false;
+              break;
+            case 39:
+              azul.ax = 0;
+              acelerandoX = false;
+              break;
+            case 40:
+              azul.ay = 0;
+              acelerandoY = false;
+              break;
+          }
+        });
+    </script>
+  </body>
+</html>
