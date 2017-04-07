@@ -16,6 +16,9 @@ function SpriteEstatico() {
 
     /*** Cor  **/
     this.color  = '#069';
+
+    /*** Tag ***/
+    this.tag = null;
 }
 
 SpriteEstatico.prototype.desenhar = function (contexto){

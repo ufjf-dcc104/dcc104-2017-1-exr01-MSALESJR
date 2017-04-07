@@ -35,25 +35,25 @@ Level.prototype.montaLevel = function(){
     this.player.height = 50;
     this.player.displayName(this.contexto, 100, 100);
 
-    for(var i = 0; i < 10; i++){
-        var spriteEstatico = new SpriteEstatico();
-        spriteEstatico.x = (this.contexto.canvas.width  * Math.random());
-        spriteEstatico.y = (this.contexto.canvas.height * Math.random());
-        spriteEstatico.width = 50;
-        spriteEstatico.height= 50;
-        this.spritesEstaticos.push(spriteEstatico);
-    }
+    /*** Adicionar plataforma inicio **/
+    var plataformaOrigem = new SpriteEstatico();
+    plataformaOrigem.x = 50;
+    plataformaOrigem.y = 450;
+    plataformaOrigem.width = 100;
+    plataformaOrigem.height= 15;
+    plataformaOrigem.color = 'red';
+    plataformaOrigem.tag   = 'pf_origem';
+    this.spritesEstaticos.push(plataformaOrigem);
 
-    for(var i = 0; i < 10; i++){
-        var spriteDinamico = new SpriteDinamico();
-        spriteDinamico.x = (this.contexto.canvas.width  * Math.random());
-        spriteDinamico.y = (this.contexto.canvas.height * Math.random());
-        spriteDinamico.width = 50;
-        spriteDinamico.height= 50;
-        spriteDinamico.color = 'red';
-        this.spritesDinamicos.push(spriteDinamico);
-    }
-
+    /*** Adicionar plataforma fim **/
+    var plataformaDestino = new SpriteEstatico();
+    plataformaDestino.x = 552;
+    plataformaDestino.y = 250;
+    plataformaDestino.width = 100;
+    plataformaDestino.height= 30;
+    plataformaDestino.color = 'red';
+    plataformaDestino.tag   = 'pf_destino';
+    this.spritesEstaticos.push(plataformaDestino);
 }
 
 

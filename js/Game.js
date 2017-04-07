@@ -43,7 +43,6 @@ Game.prototype.montaTela = function(){
     this.contexto.clearRect(0,0,this.width, this.height);
 }
 
-
 Game.prototype.run = function (){
     this.montaTela();
     this.level.desenhar();
