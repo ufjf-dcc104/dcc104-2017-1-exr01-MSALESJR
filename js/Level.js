@@ -1,7 +1,8 @@
 /**
  * Criado por Marcus em 06/04/2017.
  */
-function Level() {
+function Level()
+{
     /*** Contexto utilizado para manipular a tela **/
     this.contexto = null;
 
@@ -15,8 +16,8 @@ function Level() {
     this.player = null;
 }
 
-Level.prototype.init = function(contexto){
-    console.log(contexto);
+Level.prototype.init = function(contexto)
+{
     if(contexto !== null){
         this.contexto = contexto;
         this.montaLevel();
@@ -25,12 +26,13 @@ Level.prototype.init = function(contexto){
     }
 }
 
-Level.prototype.montaLevel = function(){
+Level.prototype.montaLevel = function()
+{
 
     /*** Instanciando o player **/
     this.player = new Player();
-    this.player.x = 100;
-    this.player.y = 100;
+    this.player.x = 50;
+    this.player.y = 417;
     this.player.width  = 50;
     this.player.height = 50;
     this.player.displayName(this.contexto, 100, 100);
@@ -57,7 +59,8 @@ Level.prototype.montaLevel = function(){
 }
 
 
-Level.prototype.desenhar = function (){
+Level.prototype.desenhar = function ()
+{
     /*** Desenha os elementos staticos na tela **/
     for(var i = 0; i < this.spritesEstaticos.length; i++){
         this.spritesEstaticos[i].desenhar(this.contexto);

@@ -1,7 +1,8 @@
 /**
  * Criado por Marcus em 06/04/2017.
  */
-function SpriteEstatico() {
+function SpriteEstatico()
+{
     /*** Posicao x **/
     this.x = 0;
 
@@ -21,7 +22,8 @@ function SpriteEstatico() {
     this.tag = null;
 }
 
-SpriteEstatico.prototype.desenhar = function (contexto){
+SpriteEstatico.prototype.desenhar = function (contexto)
+{
     contexto.save();
     contexto.translate(this.x, this.y);
     contexto.rotate(this.angulo * Math.PI / 360);

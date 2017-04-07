@@ -1,7 +1,8 @@
 /**
  * Criado por Marcus em 06/04/2017.
  */
-function Player() {
+function Player()
+{
     /*** Nome do Player **/
     this.name = 'Player 1'
 
@@ -24,7 +25,8 @@ function Player() {
     this.fuel = '100%';
 }
 
-Player.prototype.desenhar = function (contexto){
+Player.prototype.desenhar = function (contexto)
+{
     contexto.save();
     contexto.translate(this.x, this.y);
     contexto.rotate(this.angulo * Math.PI / 360);
@@ -35,14 +37,16 @@ Player.prototype.desenhar = function (contexto){
     contexto.restore();
 }
 
-Player.prototype.displayName = function (contexto, x, y){
+Player.prototype.displayName = function (contexto, x, y)
+{
     contexto.fillStyle   = '#fff';
     contexto.strokeStyle = "#fff";
     contexto.font="18px Arial";
     contexto.fillText(this.name,x,y);
 }
 
-Player.prototype.displayFuel = function (contexto, x, y){
+Player.prototype.displayFuel = function (contexto, x, y)
+{
     contexto.fillStyle   = '#fff';
     contexto.strokeStyle = "#fff";
     contexto.font="18px Arial";
