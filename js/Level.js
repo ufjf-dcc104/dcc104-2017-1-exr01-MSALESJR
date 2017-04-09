@@ -31,7 +31,7 @@ Level.prototype.montaLevel = function()
 
     /*** Instanciando o player **/
     this.player = new Player();
-    this.player.x = 50;
+    this.player.x = 60;
     this.player.y = 417;
     this.player.width  = 50;
     this.player.height = 50;
@@ -59,7 +59,7 @@ Level.prototype.montaLevel = function()
 }
 
 
-Level.prototype.desenhar = function ()
+Level.prototype.desenhar = function (dt)
 {
     /*** Desenha os elementos staticos na tela **/
     for(var i = 0; i < this.spritesEstaticos.length; i++){
@@ -72,6 +72,7 @@ Level.prototype.desenhar = function ()
     }
 
     /*** Desenha e exibi o nome do player **/
+    this.player.mover(dt);
     this.player.desenhar(this.contexto);
     this.player.displayName(this.contexto,5,25);
     this.player.displayFuel(this.contexto,550,25);
