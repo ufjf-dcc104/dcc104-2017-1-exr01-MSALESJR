@@ -28,7 +28,7 @@ function Level()
     this.gravidade = 30;
 
     /*** indica a quantidade de obstaculo que teremos no level **/
-    this.quantidade_obstaculo = 10;
+    this.quantidade_obstaculo = 20;
 }
 
 Level.prototype.init = function(contexto)
