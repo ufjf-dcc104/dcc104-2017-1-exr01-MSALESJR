@@ -45,8 +45,8 @@ Level.prototype.montaLevel = function()
 {
     /*** Instanciando o player **/
     this.player = new Player();
-    this.player.x = 60;
-    this.player.y = 410;
+    this.player.x = 50;
+    this.player.y = 415;
     this.player.width  = 50;
     this.player.height = 50;
     this.player.gravidade = this.gravidade;
@@ -56,8 +56,8 @@ Level.prototype.montaLevel = function()
     plataformaOrigem.x = 50;
     plataformaOrigem.y = 450;
     plataformaOrigem.width = 100;
-    plataformaOrigem.height= 30;
-    plataformaOrigem.color = 'red';
+    plataformaOrigem.height= 20;
+    plataformaOrigem.color = '#069';
     plataformaOrigem.tag   = 'pf_origem';
     this.plataforma_origem = plataformaOrigem;
     this.spritesEstaticos.push(plataformaOrigem);
@@ -67,8 +67,8 @@ Level.prototype.montaLevel = function()
     plataformaDestino.x = 552;
     plataformaDestino.y = 250;
     plataformaDestino.width = 100;
-    plataformaDestino.height= 30;
-    plataformaDestino.color = 'red';
+    plataformaDestino.height= 20;
+    plataformaDestino.color = '#069';
     plataformaDestino.tag   = 'pf_destino';
     this.plataforma_destino = plataformaDestino;
     this.spritesEstaticos.push(plataformaDestino);
@@ -78,7 +78,6 @@ Level.prototype.montaLevel = function()
     namePlayer.value = this.player.name;
     namePlayer.posicao_x = 5;
     namePlayer.posicao_y = 25;
-    namePlayer.desenhar(this.contexto);
     this.spritesEstaticos.push(namePlayer);
 
     /*** Adiciona parede esquerda**/
@@ -87,7 +86,7 @@ Level.prototype.montaLevel = function()
     paredeEsquerda.y = this.game.height / 2;
     paredeEsquerda.width = 3;
     paredeEsquerda.height= this.game.height + 4;
-    paredeEsquerda.color = 'red';
+    paredeEsquerda.color = '#069';
     paredeEsquerda.tag   = 'parede';
     this.spritesEstaticos.push(paredeEsquerda);
 
@@ -97,7 +96,7 @@ Level.prototype.montaLevel = function()
     paredeDireita.y = this.game.height / 2;
     paredeDireita.width = 3;
     paredeDireita.height= this.game.height;
-    paredeDireita.color = 'red';
+    paredeDireita.color = '#069';
     paredeDireita.tag   = 'parede';
     this.spritesEstaticos.push(paredeDireita);
 
@@ -107,7 +106,7 @@ Level.prototype.montaLevel = function()
     paredeSuperior.y = 0;
     paredeSuperior.width = this.game.width + 2;
     paredeSuperior.height= 3;
-    paredeSuperior.color = 'red';
+    paredeSuperior.color = '#069';
     paredeSuperior.tag   = 'parede';
     this.spritesEstaticos.push(paredeSuperior);
 
@@ -117,7 +116,7 @@ Level.prototype.montaLevel = function()
     paredeInferior.y = this.game.height;
     paredeInferior.width = this.game.width + 2;
     paredeInferior.height= 3 ;
-    paredeInferior.color = 'red';
+    paredeInferior.color = '#069';
     paredeInferior.tag   = 'parede';
     this.spritesEstaticos.push(paredeInferior);
 
@@ -127,7 +126,7 @@ Level.prototype.montaLevel = function()
         obstaculoStatico.y = this.game.height * Math.random();
         obstaculoStatico.width = 20;
         obstaculoStatico.height= 20;
-        obstaculoStatico.color = 'red';
+        obstaculoStatico.color = 'green';
         obstaculoStatico.tag = 'obstaculo';
         obstaculoStatico.angulo = 30;
         this.spritesEstaticos.push(obstaculoStatico);
@@ -136,11 +135,21 @@ Level.prototype.montaLevel = function()
 
 Level.prototype.updateLevel = function ()
 {
+    /*** Barra de combustivel **/
+    var barraFuel = new SpriteEstatico();
+    barraFuel.color = 'red';
+    barraFuel.x = 490;
+    barraFuel.y = 15;
+    barraFuel.strokeStyle = '#fff';
+    barraFuel.width = this.player.fuel * 2;
+    barraFuel.height = 10;
+    this.spritesEstaticos.push(barraFuel);
+
     /*** Display combustivel do player ***/
     var fuelPlayer = new SpriteText();
-    fuelPlayer.value = this.player.fuel.toFixed(2) +" %";
-    fuelPlayer.posicao_x = 520;
-    fuelPlayer.posicao_y = 20;
+    fuelPlayer.value = this.player.fuel.toFixed(0) +" %";
+    fuelPlayer.posicao_x = 540;
+    fuelPlayer.posicao_y = 40;
     fuelPlayer.desenhar(this.contexto);
 
     /*** Adiciona o circulo na nave **/
@@ -221,7 +230,6 @@ Level.prototype.updateLevel = function ()
 
 Level.prototype.desenhar = function (dt)
 {
-    this.updateLevel();
     /*** Desenha os elementos staticos na tela **/
     for(var i = 0; i < this.spritesEstaticos.length; i++){
         var objetoEstatico = this.spritesEstaticos[i];
@@ -272,6 +280,8 @@ Level.prototype.desenhar = function (dt)
         player.velocidade_x = 0;
         player.gravidade = 0;
     });
+
+    this.updateLevel();
 }
 
 Level.prototype.verificaColisao  = function(objeto1, objeto2, callback){

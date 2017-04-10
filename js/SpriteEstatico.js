@@ -18,6 +18,9 @@ function SpriteEstatico()
     /*** Cor  **/
     this.color  = '#069';
 
+    /*** strokeStyle **/
+    this.strokeStyle = 'black';
+
     /*** Tag ***/
     this.tag = null;
 }
@@ -29,7 +32,7 @@ SpriteEstatico.prototype.desenhar = function (contexto)
     contexto.rotate(this.angulo * Math.PI / 360);
     contexto.fillStyle = this.color;
     contexto.fillRect(-(this.width / 2), -(this.height / 2), this.width, this.height);
-    contexto.strokeStyle = "black";
+    contexto.strokeStyle = 'white';
     contexto.strokeRect(-(this.width / 2), -(this.height / 2), this.width, this.height);
     contexto.restore();
 }
