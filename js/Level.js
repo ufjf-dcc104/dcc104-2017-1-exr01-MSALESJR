@@ -241,7 +241,7 @@ Level.prototype.desenhar = function (dt)
                 level.verificaColisao(player, objetoEstatico, function (player, objeto) {
                     /*** Finaliza o jogo **/
                     if(player.fuel > 0){
-                        player.fuel -= 1;
+                        player.fuel -= 5;
                     }
                 });
             })(this,this.player, objetoEstatico);
