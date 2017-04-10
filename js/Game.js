@@ -82,6 +82,7 @@ Game.prototype.controls = function()
         addEventListener("keydown",function(event){
             /*** Vamos verificar se o player ainda tem combustivel **/
             if (game.level.player.fuel <= 0){
+                game.level.player.fuel = 0;
                 return false;
             }
 
