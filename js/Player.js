@@ -68,22 +68,6 @@ Player.prototype.desenhar = function (contexto)
     contexto.restore();
 }
 
-Player.prototype.displayName = function (contexto, x, y)
-{
-    contexto.fillStyle   = '#fff';
-    contexto.strokeStyle = "#fff";
-    contexto.font="18px Arial";
-    contexto.fillText(this.name,x,y);
-}
-
-Player.prototype.displayFuel = function (contexto, x, y)
-{
-    contexto.fillStyle   = '#fff';
-    contexto.strokeStyle = "#fff";
-    contexto.font="12px Arial";
-    contexto.fillText(this.fuel.toFixed(2) +" %",x,y);
-}
-
 Player.prototype.mover = function (dt)
 {
     /*** Calculando as componente da velocidade **/

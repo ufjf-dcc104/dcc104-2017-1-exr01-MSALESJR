@@ -22,6 +22,12 @@ function Game()
     this.anterior = new Date();
     this.atual    = new Date();
     this.dt       = (1 / 120);
+
+    /** Sinaliza fim do jogo com vitoria **/
+    this.vitoria = false;
+
+    /** Sinaliza fim do jogo com derrota **/
+    this.derrota = false;
 }
 
 Game.prototype.init = function(idCanvas, width, height)
@@ -39,6 +45,7 @@ Game.prototype.init = function(idCanvas, width, height)
 
         /*** Inicializa o level do game **/
         this.level = new Level();
+        this.level.game = this;
         this.level.init(this.contexto);
     } else {
         console.log("Nenhum elemento canvas foi encontrado no documento.");
@@ -57,7 +64,13 @@ Game.prototype.run = function ()
 {
     (function(game){
         function run(){
-            requestAnimationFrame(run);
+            animationID = requestAnimationFrame(run);
+
+            /*** Caso o jogo tenha chegado ao fim paramos a animacao**/
+            if(game.vitoria || game.derrota){
+                cancelAnimationFrame(animationID);
+            }
+
             /*** Atualiza o dt a cada frame ***/
             game.atual = new Date();
             game.dt    = ((game.atual - game.anterior) / 1000);
@@ -80,11 +93,6 @@ Game.prototype.controls = function()
     /*** Controle Nave Botao Apertado usamos clousure para passa a referencia de this na variavel game ***/
     (function(game){
         addEventListener("keydown",function(event){
-            /*** Vamos verificar se o player ainda tem combustivel **/
-            if (game.level.player.fuel <= 0){
-                game.level.player.fuel = 0;
-                return false;
-            }
 
             /*** Habilitar a gravidade novamente **/
             if (game.level.player.velocidade_y <= 0){
@@ -95,35 +103,30 @@ Game.prototype.controls = function()
 
                 /*** Apertou a tecla espaço **/
                 case 32 :
-                    console.log("Apertou para espaço");
                     break;
 
                 /*** Apertou a tecla seta para esquerda **/
                 case 37 :
                     game.level.player.aceleracao_x = -100;
                     game.level.player.fuel = game.level.player.fuel - 0.5;
-                    console.log("Apertou para esquerda");
                     break;
 
                 /*** Apertou a tecla seta para cima **/
                 case 38 :
                     game.level.player.aceleracao_y = -100;
                     game.level.player.fuel = game.level.player.fuel - 1;
-                    console.log("Apertou para cima");
                     break;
 
                 /*** Apertou a tecla seta para direita **/
                 case 39 :
                     game.level.player.aceleracao_x = +100;
                     game.level.player.fuel = game.level.player.fuel - 0.5;
-                    console.log("Apertou para direita");
                     break;
 
                 /*** Apertou a tecla seta para baixo **/
                 case 40 :
                     game.level.player.aceleracao_y = +100;
                     game.level.player.fuel = game.level.player.fuel - 0.1;
-                    console.log("Apertou para baixo");
                     break;
             }
         });
@@ -133,31 +136,26 @@ Game.prototype.controls = function()
             switch(event.keyCode){
                 /*** Soltou a tecla espaço **/
                 case 32 :
-                    console.log("Soltou para espaço");
                     break;
 
                 /*** Soltou a tecla seta para esquerda **/
                 case 37 :
                     game.level.player.aceleracao_x = 0;
-                    console.log("Soltou para esquerda");
                     break;
 
                 /*** Soltou a tecla seta para cima **/
                 case 38 :
                     game.level.player.aceleracao_y = 0;
-                    console.log("Soltou para cima");
                     break;
 
                 /*** Soltou a tecla seta para direita **/
                 case 39 :
                     game.level.player.aceleracao_x = 0;
-                    console.log("Soltou para direita");
                     break;
 
                 /*** Soltou a tecla seta para baixo **/
                 case 40 :
                     game.level.player.aceleracao_y = 0;
-                    console.log("Soltou para baixo");
                     break;
             }
         });
