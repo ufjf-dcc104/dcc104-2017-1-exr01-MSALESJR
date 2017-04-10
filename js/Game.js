@@ -66,11 +66,6 @@ Game.prototype.run = function ()
         function run(){
             animationID = requestAnimationFrame(run);
 
-            /*** Caso o jogo tenha chegado ao fim paramos a animacao**/
-            if(game.vitoria || game.derrota){
-                cancelAnimationFrame(animationID);
-            }
-
             /*** Atualiza o dt a cada frame ***/
             game.atual = new Date();
             game.dt    = ((game.atual - game.anterior) / 1000);
@@ -82,6 +77,11 @@ Game.prototype.run = function ()
 
             /*** Atualiza o valor para calcular um novo dt**/
             game.anterior = game.atual;
+
+            /*** Caso o jogo tenha chegado ao fim paramos a animacao**/
+            if(game.vitoria || game.derrota){
+                cancelAnimationFrame(animationID);
+            }
         }
         run();
     })(this);

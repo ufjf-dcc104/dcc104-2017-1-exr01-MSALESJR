@@ -26,6 +26,9 @@ function Level()
 
     /*** Gravidade  **/
     this.gravidade = 30;
+
+    /*** indica a quantidade de obstaculo que teremos no level **/
+    this.quantidade_obstaculo = 10;
 }
 
 Level.prototype.init = function(contexto)
@@ -117,6 +120,18 @@ Level.prototype.montaLevel = function()
     paredeInferior.color = 'red';
     paredeInferior.tag   = 'parede';
     this.spritesEstaticos.push(paredeInferior);
+
+    for(var i = 0; i < this.quantidade_obstaculo; i++){
+        var obstaculoStatico = new SpriteEstatico();
+        obstaculoStatico.x = this.plataforma_origem.width + (Math.random() * (this.game.width - this.plataforma_origem.width - this.plataforma_destino.width));
+        obstaculoStatico.y = this.game.height * Math.random();
+        obstaculoStatico.width = 20;
+        obstaculoStatico.height= 20;
+        obstaculoStatico.color = 'red';
+        obstaculoStatico.tag = 'obstaculo';
+        obstaculoStatico.angulo = 30;
+        this.spritesEstaticos.push(obstaculoStatico);
+    }
 }
 
 Level.prototype.updateLevel = function ()
@@ -219,7 +234,20 @@ Level.prototype.desenhar = function (dt)
                 player.velocidade_y = 0;
             });
         }
-        this.spritesEstaticos[i].desenhar(this.contexto);
+
+        if(objetoEstatico.tag === 'obstaculo'){
+            objetoEstatico.angulo += 30;
+            (function(level, player, objetoEstatico){
+                level.verificaColisao(player, objetoEstatico, function (player, objeto) {
+                    /*** Finaliza o jogo **/
+                    if(player.fuel > 0){
+                        player.fuel -= 1;
+                    }
+                });
+            })(this,this.player, objetoEstatico);
+        }
+
+        objetoEstatico.desenhar(this.contexto);
     }
 
     /*** Desenha os elementos dinamicos na tela **/
