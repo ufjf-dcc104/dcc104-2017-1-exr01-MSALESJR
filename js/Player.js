@@ -46,7 +46,7 @@ function Player()
     this.color  = 'green';
 
     /*** Fuel Quantidade vida do player ***/
-    this.fuel = '100%';
+    this.fuel = 100;
 }
 
 Player.prototype.desenhar = function (contexto)
@@ -80,8 +80,8 @@ Player.prototype.displayFuel = function (contexto, x, y)
 {
     contexto.fillStyle   = '#fff';
     contexto.strokeStyle = "#fff";
-    contexto.font="18px Arial";
-    contexto.fillText(this.fuel,x,y);
+    contexto.font="12px Arial";
+    contexto.fillText(this.fuel.toFixed(2) +" %",x,y);
 }
 
 Player.prototype.mover = function (dt)

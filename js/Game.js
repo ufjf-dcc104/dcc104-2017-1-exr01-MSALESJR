@@ -80,7 +80,18 @@ Game.prototype.controls = function()
     /*** Controle Nave Botao Apertado usamos clousure para passa a referencia de this na variavel game ***/
     (function(game){
         addEventListener("keydown",function(event){
+            /*** Vamos verificar se o player ainda tem combustivel **/
+            if (game.level.player.fuel <= 0){
+                return false;
+            }
+
+            /*** Habilitar a gravidade novamente **/
+            if (game.level.player.velocidade_y <= 0){
+                game.level.player.gravidade = game.level.gravidade;
+            }
+
             switch(event.keyCode){
+
                 /*** Apertou a tecla espaço **/
                 case 32 :
                     console.log("Apertou para espaço");
@@ -89,24 +100,28 @@ Game.prototype.controls = function()
                 /*** Apertou a tecla seta para esquerda **/
                 case 37 :
                     game.level.player.aceleracao_x = -100;
+                    game.level.player.fuel = game.level.player.fuel - 0.5;
                     console.log("Apertou para esquerda");
                     break;
 
                 /*** Apertou a tecla seta para cima **/
                 case 38 :
                     game.level.player.aceleracao_y = -100;
+                    game.level.player.fuel = game.level.player.fuel - 1;
                     console.log("Apertou para cima");
                     break;
 
                 /*** Apertou a tecla seta para direita **/
                 case 39 :
                     game.level.player.aceleracao_x = +100;
+                    game.level.player.fuel = game.level.player.fuel - 0.5;
                     console.log("Apertou para direita");
                     break;
 
                 /*** Apertou a tecla seta para baixo **/
                 case 40 :
                     game.level.player.aceleracao_y = +100;
+                    game.level.player.fuel = game.level.player.fuel - 0.1;
                     console.log("Apertou para baixo");
                     break;
             }
