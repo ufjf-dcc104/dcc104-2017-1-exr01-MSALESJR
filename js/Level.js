@@ -69,17 +69,58 @@ Level.prototype.montaLevel = function()
     plataformaDestino.tag   = 'pf_destino';
     this.plataforma_destino = plataformaDestino;
     this.spritesEstaticos.push(plataformaDestino);
-}
 
-Level.prototype.updateLevel = function ()
-{
     /*** Display nome do player **/
     var namePlayer = new SpriteText();
     namePlayer.value = this.player.name;
     namePlayer.posicao_x = 5;
     namePlayer.posicao_y = 25;
     namePlayer.desenhar(this.contexto);
+    this.spritesEstaticos.push(namePlayer);
 
+    /*** Adiciona parede esquerda**/
+    var paredeEsquerda = new SpriteEstatico();
+    paredeEsquerda.x = 0;
+    paredeEsquerda.y = this.game.height / 2;
+    paredeEsquerda.width = 3;
+    paredeEsquerda.height= this.game.height + 4;
+    paredeEsquerda.color = 'red';
+    paredeEsquerda.tag   = 'parede';
+    this.spritesEstaticos.push(paredeEsquerda);
+
+    /*** Adiciona parede direita**/
+    var paredeDireita = new SpriteEstatico();
+    paredeDireita.x = this.game.width;
+    paredeDireita.y = this.game.height / 2;
+    paredeDireita.width = 3;
+    paredeDireita.height= this.game.height;
+    paredeDireita.color = 'red';
+    paredeDireita.tag   = 'parede';
+    this.spritesEstaticos.push(paredeDireita);
+
+    /*** Adiciona parede superior **/
+    var paredeSuperior = new SpriteEstatico();
+    paredeSuperior.x = this.game.width / 2 ;
+    paredeSuperior.y = 0;
+    paredeSuperior.width = this.game.width + 2;
+    paredeSuperior.height= 3;
+    paredeSuperior.color = 'red';
+    paredeSuperior.tag   = 'parede';
+    this.spritesEstaticos.push(paredeSuperior);
+
+    /*** Adiciona parede superior **/
+    var paredeInferior = new SpriteEstatico();
+    paredeInferior.x = this.game.width / 2;
+    paredeInferior.y = this.game.height;
+    paredeInferior.width = this.game.width + 2;
+    paredeInferior.height= 3 ;
+    paredeInferior.color = 'red';
+    paredeInferior.tag   = 'parede';
+    this.spritesEstaticos.push(paredeInferior);
+}
+
+Level.prototype.updateLevel = function ()
+{
     /*** Display combustivel do player ***/
     var fuelPlayer = new SpriteText();
     fuelPlayer.value = this.player.fuel.toFixed(2) +" %";
@@ -123,6 +164,7 @@ Level.prototype.updateLevel = function ()
     linePlataformaFinalNave.posicao_x_final = circlePlataformaFinal.posicao_x;
     linePlataformaFinalNave.posicao_y_final = circlePlataformaFinal.posicao_y;
     linePlataformaFinalNave.desenhar(this.contexto);
+
     /*** Distancia ate o objetivo ***/
     var distancia = linePlataformaFinalNave.size()
 
@@ -167,6 +209,16 @@ Level.prototype.desenhar = function (dt)
     this.updateLevel();
     /*** Desenha os elementos staticos na tela **/
     for(var i = 0; i < this.spritesEstaticos.length; i++){
+        var objetoEstatico = this.spritesEstaticos[i];
+        if(objetoEstatico.tag === 'parede'){
+            this.verificaColisao(this.player, objetoEstatico, function (player, objeto) {
+                /*** Coloca o player na base **/
+                player.x = 60;
+                player.y = 410;
+                player.velocidade_x = 0;
+                player.velocidade_y = 0;
+            });
+        }
         this.spritesEstaticos[i].desenhar(this.contexto);
     }
 
