@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>DCC104-2017 - (Trabalho - 01)</title>
+        <link href="css/style.css" rel="stylesheet">
+        <script src="js/SpriteText.js" charset="utf-8"></script>
+        <script src="js/SpriteCircle.js" charset="utf-8"></script>
+        <script src="js/SpriteLine.js" charset="utf-8"></script>
+        <script src="js/SpriteEstatico.js" charset="utf-8"></script>
+        <script src="js/SpriteDinamico.js" charset="utf-8"></script>
+        <script src="js/Player.js" charset="utf-8"></script>
+        <script src="js/level.js" charset="utf-8"></script>
+        <script src="js/Game.js" charset="utf-8"></script>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+        <script type="text/javascript">
+            var game = new Game();
+            game.init('canvas',600,480);
+            game.run();
+        </script>
+    </body>
+</html>
