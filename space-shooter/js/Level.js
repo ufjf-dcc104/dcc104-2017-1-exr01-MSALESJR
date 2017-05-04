@@ -28,7 +28,16 @@ function Level()
     this.gravidade = 30;
 
     /*** indica a quantidade de obstaculo que teremos no level **/
-    this.quantidade_obstaculo = 20;
+    this.quantidade_obstaculo = 10;
+
+    /** Array de variaveis **/
+    this.variaveis = [];
+
+    this.time = 0;
+
+    this.time_tiro = 1;
+    this.tempo_ente_tiro = 0.200;
+    this.pode_atirar = true;
 }
 
 Level.prototype.init = function(contexto)
@@ -43,251 +52,122 @@ Level.prototype.init = function(contexto)
 
 Level.prototype.montaLevel = function()
 {
+    /*** Seta variaveis iniciais **/
+    this.variaveis['vidas'] = 3;
+    this.variaveis['energia'] = 100;
+    this.variaveis['pontos']  = 0;
+
     /*** Instanciando o player **/
     this.player = new Player();
-    this.player.x = 50;
-    this.player.y = 415;
+    this.player.x = this.game.width / 2;
+    this.player.y = 450;
     this.player.width  = 50;
     this.player.height = 50;
-    this.player.gravidade = this.gravidade;
+    this.player.gravidade = 0;
 
-    /*** Adiciona plataforma inicio **/
-    var plataformaOrigem = new SpriteEstatico();
-    plataformaOrigem.x = 50;
-    plataformaOrigem.y = 450;
-    plataformaOrigem.width = 100;
-    plataformaOrigem.height= 20;
-    plataformaOrigem.color = '#069';
-    plataformaOrigem.tag   = 'pf_origem';
-    this.plataforma_origem = plataformaOrigem;
-    this.spritesEstaticos.push(plataformaOrigem);
+    /*** Display Label Vida **/
+    var lblVida = new SpriteText();
+    lblVida.value = 'Vida : ' + this.variaveis['vidas'];
+    lblVida.posicao_x = 15;
+    lblVida.posicao_y = 25;
+    lblVida.tag = 'vidas';
+    this.spritesEstaticos.push(lblVida);
 
-    /*** Adiciona plataforma fim **/
-    var plataformaDestino = new SpriteEstatico();
-    plataformaDestino.x = 552;
-    plataformaDestino.y = 250;
-    plataformaDestino.width = 100;
-    plataformaDestino.height= 20;
-    plataformaDestino.color = '#069';
-    plataformaDestino.tag   = 'pf_destino';
-    this.plataforma_destino = plataformaDestino;
-    this.spritesEstaticos.push(plataformaDestino);
-
-    /*** Display nome do player **/
-    var namePlayer = new SpriteText();
-    namePlayer.value = this.player.name;
-    namePlayer.posicao_x = 5;
-    namePlayer.posicao_y = 25;
-    this.spritesEstaticos.push(namePlayer);
-
-    /*** Adiciona parede esquerda**/
-    var paredeEsquerda = new SpriteEstatico();
-    paredeEsquerda.x = 0;
-    paredeEsquerda.y = this.game.height / 2;
-    paredeEsquerda.width = 3;
-    paredeEsquerda.height= this.game.height + 4;
-    paredeEsquerda.color = '#069';
-    paredeEsquerda.tag   = 'parede';
-    this.spritesEstaticos.push(paredeEsquerda);
-
-    /*** Adiciona parede direita**/
-    var paredeDireita = new SpriteEstatico();
-    paredeDireita.x = this.game.width;
-    paredeDireita.y = this.game.height / 2;
-    paredeDireita.width = 3;
-    paredeDireita.height= this.game.height;
-    paredeDireita.color = '#069';
-    paredeDireita.tag   = 'parede';
-    this.spritesEstaticos.push(paredeDireita);
-
-    /*** Adiciona parede superior **/
-    var paredeSuperior = new SpriteEstatico();
-    paredeSuperior.x = this.game.width / 2 ;
-    paredeSuperior.y = 0;
-    paredeSuperior.width = this.game.width + 2;
-    paredeSuperior.height= 3;
-    paredeSuperior.color = '#069';
-    paredeSuperior.tag   = 'parede';
-    this.spritesEstaticos.push(paredeSuperior);
-
-    /*** Adiciona parede superior **/
-    var paredeInferior = new SpriteEstatico();
-    paredeInferior.x = this.game.width / 2;
-    paredeInferior.y = this.game.height;
-    paredeInferior.width = this.game.width + 2;
-    paredeInferior.height= 3 ;
-    paredeInferior.color = '#069';
-    paredeInferior.tag   = 'parede';
-    this.spritesEstaticos.push(paredeInferior);
-
-    for(var i = 0; i < this.quantidade_obstaculo; i++){
-        var obstaculoStatico = new SpriteEstatico();
-        obstaculoStatico.x = this.plataforma_origem.width + (Math.random() * (this.game.width - this.plataforma_origem.width - this.plataforma_destino.width));
-        obstaculoStatico.y = this.game.height * Math.random();
-        obstaculoStatico.width = 20;
-        obstaculoStatico.height= 20;
-        obstaculoStatico.color = 'green';
-        obstaculoStatico.tag = 'obstaculo';
-        obstaculoStatico.angulo = 30;
-        this.spritesEstaticos.push(obstaculoStatico);
-    }
+    /*** Display Label Pontos **/
+    var lblPontos = new SpriteText();
+    lblPontos.value = 'Pontos : ' + this.variaveis['pontos'];
+    lblPontos.posicao_x = 100;
+    lblPontos.posicao_y = 25;
+    lblPontos.tag = 'pontos';
+    this.spritesEstaticos.push(lblPontos);
 }
 
-Level.prototype.updateLevel = function ()
+Level.prototype.updateLevel = function (dt)
 {
-    /*** Barra de combustivel **/
-    var barraFuel = new SpriteEstatico();
-    barraFuel.color = 'red';
-    barraFuel.x = 490;
-    barraFuel.y = 15;
-    barraFuel.strokeStyle = '#fff';
-    barraFuel.width = this.player.fuel * 2;
-    barraFuel.height = 10;
-    this.spritesEstaticos.push(barraFuel);
+    this.time = this.time + dt;
+    this.time_tiro = this.time_tiro + dt;
 
-    /*** Display combustivel do player ***/
-    var fuelPlayer = new SpriteText();
-    fuelPlayer.value = this.player.fuel.toFixed(0) +" %";
-    fuelPlayer.posicao_x = 540;
-    fuelPlayer.posicao_y = 40;
-    fuelPlayer.desenhar(this.contexto);
-
-    /*** Adiciona o circulo na nave **/
-    var circleNave = new SpriteCircle();
-    circleNave.posicao_x = this.player.x;
-    circleNave.posicao_y = this.player.y + (this.player.height / 2);
-    circleNave.raio = 5;
-    circleNave.desenhar(this.contexto);
-
-    /*** Adiciona o circulo a plataforma inicial **/
-    var circlePlataformaInicial = new SpriteCircle();
-    circlePlataformaInicial.posicao_x = this.plataforma_origem.x;
-    circlePlataformaInicial.posicao_y = this.plataforma_origem.y - (this.plataforma_origem.height / 2);
-    circlePlataformaInicial.raio = 5;
-    circlePlataformaInicial.desenhar(this.contexto);
-
-    /*** Adiciona o circulo a plataforma final **/
-    var circlePlataformaFinal = new SpriteCircle();
-    circlePlataformaFinal.posicao_x = this.plataforma_destino.x;
-    circlePlataformaFinal.posicao_y = this.plataforma_destino.y - (this.plataforma_destino.height / 2);
-    circlePlataformaFinal.raio = 5;
-    circlePlataformaFinal.desenhar(this.contexto);
-
-    /*** Adicionar linha que liga plataforma inicial a neve **/
-    var linePlataformaInicialNave = new SpriteLine();
-    linePlataformaInicialNave.posicao_x_inicial = circleNave.posicao_x;
-    linePlataformaInicialNave.posicao_y_inicial = circleNave.posicao_y;
-    linePlataformaInicialNave.posicao_x_final = circlePlataformaInicial.posicao_x;
-    linePlataformaInicialNave.posicao_y_final = circlePlataformaInicial.posicao_y;
-    linePlataformaInicialNave.desenhar(this.contexto);
-
-    /*** Adicionar linha que liga plataforma final a neve **/
-    var linePlataformaFinalNave = new SpriteLine();
-    linePlataformaFinalNave.posicao_x_inicial = circleNave.posicao_x;
-    linePlataformaFinalNave.posicao_y_inicial = circleNave.posicao_y;
-    linePlataformaFinalNave.posicao_x_final = circlePlataformaFinal.posicao_x;
-    linePlataformaFinalNave.posicao_y_final = circlePlataformaFinal.posicao_y;
-    linePlataformaFinalNave.desenhar(this.contexto);
-
-    /*** Distancia ate o objetivo ***/
-    var distancia = linePlataformaFinalNave.size()
-
-    /*** Mostrar mensagem de Vitoria **/
-    var displayDistancia = new SpriteText();
-    displayDistancia.value = distancia.toFixed(2);
-    displayDistancia.posicao_x = this.player.x + 20;
-    displayDistancia.posicao_y = this.player.y + 35;
-    displayDistancia.font = '10px Arial';
-    displayDistancia.desenhar(this.contexto);
-
-    if(distancia <= 2)
-    {
-        /*** Mostrar mensagem de Vitoria **/
-        var vitoriaDisplay = new SpriteText();
-        vitoriaDisplay.value = "Parabéns";
-        vitoriaDisplay.posicao_x = 250;
-        vitoriaDisplay.posicao_y = 250;
-        vitoriaDisplay.font = '28px Arial';
-        vitoriaDisplay.desenhar(this.contexto);
-
-        /*** sinaliza o fim do jogo **/
-        this.game.vitoria = true;
+    /*** Desenha os elementos staticos na tela **/
+    for(var i = 0; i < this.spritesEstaticos.length; i++){
+        var elementoEstatico = this.spritesEstaticos[i];
+        if(elementoEstatico.tag === 'vidas'){
+            elementoEstatico.value = 'Vida : ' + this.variaveis['vidas'];
+        }else if(elementoEstatico.tag === 'pontos'){
+            elementoEstatico.value = 'Pontos : ' + this.variaveis['pontos'];
+        }
+        elementoEstatico.desenhar(this.contexto);
     }
 
-    /*** Vamos verificar se o player ainda tem combustivel **/
-    if (this.player.fuel <= 0){
-        this.player.fuel = 0;
-        /*** Mostrar mensagem de Derrota **/
-        var derrotaDisplay = new SpriteText();
-        derrotaDisplay.value = "Fim de Jogo";
-        derrotaDisplay.posicao_x = 250;
-        derrotaDisplay.posicao_y = 250;
-        derrotaDisplay.font = '28px Arial';
-        derrotaDisplay.desenhar(this.contexto);
-        this.game.derrota = true;
+    /*** Desenha os elementos dinamicos na tela **/
+    for(var i = 0; i < this.spritesDinamicos.length; i++){
+        var elementoDinamico = this.spritesDinamicos[i];
+
+        if(elementoDinamico.y > elementoDinamico.height + this.game.height){
+            this.spritesDinamicos.splice(i,1);
+            elementoDinamico = null;
+        }else if(elementoDinamico.y < -elementoDinamico.height){
+            this.spritesDinamicos.splice(i,1);
+            elementoDinamico = null;
+        }else{
+            if(elementoDinamico.tag === 'tiro'){
+                for(var j = 0; j < this.spritesDinamicos.length; j++){
+                    if(this.spritesDinamicos[j].tag !== 'tiro'){
+                        var inimigo = this.spritesDinamicos[j];
+                        this.verificaColisao(this, elementoDinamico, inimigo, function(level, tiro, inimigo){
+                            tiro.y = -100;
+                            inimigo.y = -100;
+                            level.variaveis['pontos'] += 5;
+                        });
+                    }
+                }
+            }else {
+                for(var j = 0; j < this.spritesDinamicos.length; j++){
+                    if(this.spritesDinamicos[j].tag !== 'tiro'){
+                        var inimigo = this.spritesDinamicos[j];
+                        this.verificaColisao(this, this.player, elementoDinamico, function(level, player, inimigo){
+                            level.variaveis['vidas']  -= 1;
+                            inimigo.y = level.game.height + inimigo.height;
+                        });
+                    }
+                }
+            }
+            elementoDinamico.mover(dt);
+            elementoDinamico.desenhar(this.contexto);
+        }
+    }
+
+    if(this.time >= 2.5){
+        /*** Instanciando o player **/
+        var inimigo = new Player();
+        var x_random = Math.random() * this.game.width;
+        inimigo.x = x_random;
+        inimigo.y = -20;
+        inimigo.width  = 50;
+        inimigo.height = 50;
+        inimigo.angulo = 360;
+        inimigo.gravidade = 10;
+        inimigo.velocidade_y = 30;
+        this.spritesDinamicos.push(inimigo);
+        this.time = 0;
+    }
+    if(this.time_tiro >= this.tempo_ente_tiro){
+        this.pode_atirar = true;
+        this.time_tiro = 0;
     }
 }
 
 Level.prototype.desenhar = function (dt)
 {
-    /*** Desenha os elementos staticos na tela **/
-    for(var i = 0; i < this.spritesEstaticos.length; i++){
-        var objetoEstatico = this.spritesEstaticos[i];
-        if(objetoEstatico.tag === 'parede'){
-            this.verificaColisao(this.player, objetoEstatico, function (player, objeto) {
-                /*** Coloca o player na base **/
-                player.x = 60;
-                player.y = 410;
-                player.velocidade_x = 0;
-                player.velocidade_y = 0;
-            });
-        }
-
-        if(objetoEstatico.tag === 'obstaculo'){
-            objetoEstatico.angulo += 30;
-            (function(level, player, objetoEstatico){
-                level.verificaColisao(player, objetoEstatico, function (player, objeto) {
-                    /*** Finaliza o jogo **/
-                    if(player.fuel > 0){
-                        player.fuel -= 5;
-                    }
-                });
-            })(this,this.player, objetoEstatico);
-        }
-
-        objetoEstatico.desenhar(this.contexto);
-    }
-
-    /*** Desenha os elementos dinamicos na tela **/
-    for(var i = 0; i < this.spritesDinamicos.length; i++){
-        this.spritesDinamicos[i].desenhar(this.contexto);
-    }
-
     /*** Desenha e exibi o nome do player **/
     this.player.mover(dt);
     this.player.desenhar(this.contexto);
-
-    /*** Verifica colisao nave com plataforma inicial **/
-    this.verificaColisao(this.player,this.plataforma_origem, function(player, plataforma_origem){
-        player.velocidade_y = 0;
-        player.velocidade_x = 0;
-        player.gravidade = 0;
-    });
-
-    /*** Verifica colisao nave com plataforma final **/
-    this.verificaColisao(this.player,this.plataforma_destino, function(player, plataforma_destino){
-        player.velocidade_y = 0;
-        player.velocidade_x = 0;
-        player.gravidade = 0;
-    });
-
-    this.updateLevel();
+    this.updateLevel(dt);
 }
 
-Level.prototype.verificaColisao  = function(objeto1, objeto2, callback){
+Level.prototype.verificaColisao  = function(level, objeto1, objeto2, callback){
     if(objeto1.x + (objeto1.width / 2) < objeto2.x - (objeto2.width / 2))  return false;
     if(objeto1.x - (objeto1.width / 2) > objeto2.x + (objeto2.width / 2))  return false;
     if(objeto1.y + (objeto1.height/ 2) < objeto2.y - (objeto2.height / 2)) return false;
     if(objeto1.y - (objeto1.height/ 2) > objeto2.y + (objeto2.height/2)) return false;
-    callback(objeto1, objeto2);
+    callback(level, objeto1, objeto2);
 }

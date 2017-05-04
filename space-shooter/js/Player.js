@@ -79,3 +79,16 @@ Player.prototype.mover = function (dt)
     /*** Calculando o angulo **/
     this.angulo = this.angulo + this.velocidade_angular * dt;
 };
+
+Player.prototype.atirar = function () {
+    var tiro = new SpriteDinamico();
+    tiro.tag = 'tiro';
+    tiro.x = this.x;
+    tiro.y = this.y - (this.height / 2);
+    tiro.width = 5;
+    tiro.height = 15;
+    tiro.color  = 'red';
+    tiro.velocidade_y =- 1000;
+    tiro.gravidade = -30;
+    return tiro;
+}

@@ -14,6 +14,9 @@ function SpriteText()
 
     /** Configuracao da font tamanho e familia**/
     this.font = '18px Arial';
+
+    /*** Tag ***/
+    this.tag = null;
 }
 
 SpriteText.prototype.desenhar = function (contexto)

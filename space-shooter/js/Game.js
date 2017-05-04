@@ -93,40 +93,45 @@ Game.prototype.controls = function()
     /*** Controle Nave Botao Apertado usamos clousure para passa a referencia de this na variavel game ***/
     (function(game){
         addEventListener("keydown",function(event){
-
-            /*** Habilitar a gravidade novamente **/
-            if (game.level.player.velocidade_y <= 0){
-                game.level.player.gravidade = game.level.gravidade;
-            }
-
             switch(event.keyCode){
 
                 /*** Apertou a tecla espaço **/
                 case 32 :
+                    if(game.level.pode_atirar){
+                        var tiro = game.level.player.atirar();
+                        game.level.spritesDinamicos.push(tiro);
+                        game.level.pode_atirar = false;
+                    }
                     break;
 
                 /*** Apertou a tecla seta para esquerda **/
                 case 37 :
-                    game.level.player.aceleracao_x = -100;
-                    game.level.player.fuel = game.level.player.fuel - 0.5;
+                    if(game.level.player.x > 29 ){
+                        game.level.player.aceleracao_x = -50;
+                    }else{
+                        game.level.player.x = 29;
+                        game.level.player.aceleracao_x = 0;
+                        game.level.player.velocidade_x = 0;
+                    }
                     break;
 
                 /*** Apertou a tecla seta para cima **/
                 case 38 :
-                    game.level.player.aceleracao_y = -100;
-                    game.level.player.fuel = game.level.player.fuel - 1;
                     break;
 
                 /*** Apertou a tecla seta para direita **/
                 case 39 :
-                    game.level.player.aceleracao_x = +100;
-                    game.level.player.fuel = game.level.player.fuel - 0.5;
+                    if(game.level.player.x < 570){
+                        game.level.player.aceleracao_x = +50;
+                    }else{
+                        game.level.player.aceleracao_x = 750;
+                        game.level.player.aceleracao_x = 0;
+                        game.level.player.velocidade_x = 0;
+                    }
                     break;
 
                 /*** Apertou a tecla seta para baixo **/
                 case 40 :
-                    game.level.player.aceleracao_y = +100;
-                    game.level.player.fuel = game.level.player.fuel - 0.1;
                     break;
             }
         });
@@ -145,7 +150,6 @@ Game.prototype.controls = function()
 
                 /*** Soltou a tecla seta para cima **/
                 case 38 :
-                    game.level.player.aceleracao_y = 0;
                     break;
 
                 /*** Soltou a tecla seta para direita **/
@@ -155,7 +159,6 @@ Game.prototype.controls = function()
 
                 /*** Soltou a tecla seta para baixo **/
                 case 40 :
-                    game.level.player.aceleracao_y = 0;
                     break;
             }
         });
