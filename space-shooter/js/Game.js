@@ -124,7 +124,7 @@ Game.prototype.controls = function()
                     if(game.level.player.x < 570){
                         game.level.player.aceleracao_x = +50;
                     }else{
-                        game.level.player.aceleracao_x = 750;
+                        game.level.player.aceleracao_x = 570;
                         game.level.player.aceleracao_x = 0;
                         game.level.player.velocidade_x = 0;
                     }
