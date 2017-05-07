@@ -106,13 +106,7 @@ Game.prototype.controls = function()
 
                 /*** Apertou a tecla seta para esquerda **/
                 case 37 :
-                    if(game.level.player.x > 29 ){
-                        game.level.player.aceleracao_x = -50;
-                    }else{
-                        game.level.player.x = 29;
-                        game.level.player.aceleracao_x = 0;
-                        game.level.player.velocidade_x = 0;
-                    }
+                    game.level.player.aceleracao_x = -100;
                     break;
 
                 /*** Apertou a tecla seta para cima **/
@@ -121,13 +115,7 @@ Game.prototype.controls = function()
 
                 /*** Apertou a tecla seta para direita **/
                 case 39 :
-                    if(game.level.player.x < 570){
-                        game.level.player.aceleracao_x = +50;
-                    }else{
-                        game.level.player.aceleracao_x = 570;
-                        game.level.player.aceleracao_x = 0;
-                        game.level.player.velocidade_x = 0;
-                    }
+                    game.level.player.aceleracao_x = +100;
                     break;
 
                 /*** Apertou a tecla seta para baixo **/

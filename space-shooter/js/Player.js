@@ -47,6 +47,8 @@ function Player()
 
     /*** Fuel Quantidade vida do player ***/
     this.fuel = 100;
+
+    this.booleanMover = true;
 }
 
 Player.prototype.desenhar = function (contexto)

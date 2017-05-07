@@ -87,6 +87,19 @@ Level.prototype.updateLevel = function (dt)
     this.time = this.time + dt;
     this.time_tiro = this.time_tiro + dt;
 
+    /*** verificando limite de movimento do player **/
+    if(this.player.x < 25 && this.player.booleanMover){
+        this.player.x = 30;
+        this.player.velocidade_x = 0;
+        this.player.booleanMover = false;
+    }else if(this.player.x > 570 && this.player.booleanMover){
+        this.player.x = 570;
+        this.player.velocidade_x = 0;
+        this.player.booleanMover = false;
+    }else{
+        this.player.booleanMover = true;
+    }
+
     /*** Desenha os elementos staticos na tela **/
     for(var i = 0; i < this.spritesEstaticos.length; i++){
         var elementoEstatico = this.spritesEstaticos[i];
@@ -150,6 +163,7 @@ Level.prototype.updateLevel = function (dt)
         this.spritesDinamicos.push(inimigo);
         this.time = 0;
     }
+
     if(this.time_tiro >= this.tempo_ente_tiro){
         this.pode_atirar = true;
         this.time_tiro = 0;
