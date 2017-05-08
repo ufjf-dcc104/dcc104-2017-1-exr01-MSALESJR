@@ -20,6 +20,8 @@ function SpriteDinamico()
 
     /*** Angulo **/
     this.angulo = 0;
+
+    this.tag = null;
 }
 
 SpriteDinamico.prototype.desenhar = function (contexto)
@@ -33,3 +35,14 @@ SpriteDinamico.prototype.desenhar = function (contexto)
     contexto.strokeRect(-(this.width / 2), -(this.height / 2), this.width, this.height);
     contexto.restore();
 }
+
+SpriteDinamico.prototype.mover = function (dt)
+{
+    /*** Calculando as componente da velocidade **/
+    this.velocidade_x = this.velocidade_x +   this.aceleracao_x * dt;
+    this.velocidade_y = this.velocidade_y + ( this.aceleracao_y + this.gravidade ) * dt;
+    /*** Calculando as compontente da posição **/
+    this.x = this.x + this.velocidade_x * dt;
+    this.y = this.y + this.velocidade_y * dt;
+
+};
